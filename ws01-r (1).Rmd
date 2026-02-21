@@ -268,7 +268,39 @@ f(x)=\frac{1}{\sqrt{2\pi }}e^{-x^2/2}
 $$
 Use `rnorm()` to simulate Normal(0, 1) data and `dnorm()` to compute the theoretical PDF, then create a comparison plot similar to the example above.
 
+```{r}
+# 1. Simulate Normal(0, 1) data
+n_samples <- 5000 # previous question used 5000 random samples
+samples_norm <- rnorm(n_samples, mean = 0, sd = 1) # use rnporm to simulate data.
 
+# 2. Compute theoretical PDF
+# We use a sequence of x values that covers the bulk of the distribution
+x <- seq(-4, 4, length.out = 300) # smooth sequence of 300 points from -4 to 4.
+pdf <- dnorm(x, mean = 0, sd = 1) # dnorm() to calculate theoretical pdf.
+
+# 3. Create comparison plot
+hist(samples_norm, # simulation
+  breaks = 40,
+  freq = FALSE,
+  # changes y-axis from count to density. Sum of the areas of the bars = 1.
+  col = rgb(0, 0, 1, 0.3), # transparent blue colour
+  border = "black",
+  main = "Normal(0, 1): Simulation vs PDF",
+  xlab = "x",
+  xlim = c(-4, 4)
+)
+
+# Add theoretical PDF line
+lines(x, pdf, col = "red", lwd = 2)
+
+# Add legend
+legend("topright",
+  legend = c("Simulated", "Theoretical PDF"),
+  col = c(rgb(0, 0, 1, 0.6), "red"),
+  lwd = c(10, 2),
+  bty = "n"
+)
+```
 
 #### 2.2.3 Example: Bernoulli(p)
 
@@ -372,7 +404,23 @@ abline(h = 1, lwd = 2) # true mean
 For a Uniform(0,1) random variable with $\mathbb{E}[X]=0.5$, use `runif()` to simulate 5000 samples and create a plot to demonstrate the LLNs.
 
 ```{r}
+set.seed(123)
+n <- 5000 #  5000 sample.
+u <- runif(n, 0, 1) # built-in random generator 1000 points between 0 and 1.
+running_mean <- cumsum(u) / seq_len(u) # cumulative sum / length of sequeunce.
+plot(running_mean,
+  xlim = c(0, n),
+  ylim = c(0, 1),
+  type = "l", col = "red",
+  xlab = "Number of samples (n)",
+  ylab = "Running mean",
+  main = "E(X) = 0.5. Demonstraion of LLN nearing true mean.",
+  cex.main = 2.2, # scale size of title font.
+  cex.lab = 1.8, # scale font size of labels.
+  cex.axis = 1.8,
+)
 
+abline(h = 0.5, lwd = 2, lty = 2) # lwd = line width, lty = line type.
 ```
 
 
